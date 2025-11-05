@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generador Congruencial Lineal</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="container">
+    <h1 class="main-title">Generador Congruencial Lineal (LCG)</h1>
+
+    <section class="form-section">
+      <div class="row">
+        <label> Módulo (m):
+          <input id="m" type="text" value="16" />
+        </label>
+        <label> Multiplicador (a):
+          <input id="a" type="text" value="5" />
+        </label>
+        <label> Incremento (c):
+          <input id="c" type="text" value="3" />
+        </label>
+      </div>
+      <div class="row">
+        <label> Semilla X₀:
+          <input id="seed" type="text" value="7" />
+        </label>
+        <label> Cantidad (n):
+          <input id="n" type="text" value="20" />
+        </label>
+      </div>
+      <div class="actions">
+        <button id="generate">Generar</button>
+        <button id="reset">Reiniciar</button>
+      </div>
+      <div id="message" class="message" aria-live="polite"></div>
+    </section>
+
+    <section class="results">
+      <h2>Resultados</h2>
+      <div class="grid">
+        <div class="table-wrap">
+          <table id="resultsTable">
+            <thead>
+              <tr><th>#</th><th>X_k</th><th>u_k (normalizado)</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="table-actions">
+            <button id="exportCsv" disabled>Exportar CSV</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="scatterChart" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <!--<p>Validaciones: entradas deben ser enteros; m &gt; 1; 0 ≤ semilla &lt; m. Si n &gt; 100 se pedirá confirmación.</p>-->
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
