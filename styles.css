@@ -7,7 +7,7 @@ body{font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;background:var(--
 .form-section{padding:12px 0;border-bottom:1px solid #eee;display:flex;flex-direction:column;align-items:center}
 .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 label{display:flex;flex-direction:column;font-size:14px;color:var(--muted)}
-input[type=text]{padding:6px 8px;border:1px solid #ccd; border-radius:4px;width:160px}
+input, select[type=text]{padding:6px 8px;border:1px solid #ccd; border-radius:4px;width:160px}
 .actions{margin-top:8px;display:flex;gap:8px;justify-content:center}
 button{padding:8px 12px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:var(--accent);color:#fff;cursor:pointer}
 button#reset{background:#888}

@@ -11,25 +11,26 @@
 <body>
   <main class="container">
     <h1 class="main-title">Generador Congruencial Lineal (LCG)</h1>
-
+        <center><div class="m-info" id="mInfo" aria-live="polite"></div>
     <section class="form-section">
       <div class="row">
-        <label> Módulo (m):
-          <input id="m" type="text" value="16" />
+        <label> Módulo (m) = 2^g:
+          <select id="mSelect" type="text" aria-label="Módulo m"></select>
         </label>
+
         <label> Multiplicador (a):
-          <input id="a" type="text" value="5" />
+          <input id="a" type="text"  />
         </label>
         <label> Incremento (c):
-          <input id="c" type="text" value="3" />
+          <input id="c" type="text" />
         </label>
       </div>
       <div class="row">
         <label> Semilla X₀:
-          <input id="seed" type="text" value="7" />
+          <input id="seed" type="text" />
         </label>
         <label> Cantidad (n):
-          <input id="n" type="text" value="20" />
+          <input id="n" type="text" />
         </label>
       </div>
       <div class="actions">

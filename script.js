@@ -1,10 +1,11 @@
 (function(){
   const $ = id => document.getElementById(id);
-  const mInput = $('m');
   const aInput = $('a');
   const cInput = $('c');
   const seedInput = $('seed');
   const nInput = $('n');
+  const mSelect = $('mSelect');
+  const mInfo = $('mInfo');
   const generateBtn = $('generate');
   const resetBtn = $('reset');
   const messageDiv = $('message');
@@ -35,6 +36,29 @@
   let lastM = null;
   const exportBtn = document.getElementById('exportCsv');
 
+  function populateMOptions(minG = 1, maxG = 14){
+    if(!mSelect) return;
+    mSelect.innerHTML = '';
+    for(let g = minG; g <= maxG; g++){
+      const val = Math.pow(2,g);
+      const opt = document.createElement('option');
+      opt.value = String(val);
+      opt.textContent = `${val} (2^${g})`;
+      mSelect.appendChild(opt);
+    }
+  }
+
+  function nextPow2(n){
+    if(!isFinite(n) || n < 1) return 2;
+    return Math.pow(2, Math.ceil(Math.log2(n)));
+  }
+
+  populateMOptions(1,14);
+  if(mSelect){
+    if(Array.from(mSelect.options).some(o=>o.value === '16')) mSelect.value = '';
+    mInfo.textContent = `g = ${Math.log2(parseInt(mSelect.value,10))}`;
+  }
+
   function showMessage(txt){ messageDiv.textContent = txt; }
   function clearMessage(){ messageDiv.textContent = ''; }
   function isIntegerString(s){ return /^-?\d+$/.test(String(s).trim()); }
@@ -49,9 +73,12 @@
     seed = parseInt(seed,10);
     n = parseInt(n,10);
 
+    // New restriction: todos los parámetros deben ser > 0
     if(!(m > 1)) return 'El módulo m debe ser mayor que 1.';
-    if(!(seed >= 0 && seed < m)) return 'La semilla debe cumplir 0 ≤ semilla < m.';
-    if(n < 1) return 'La cantidad n debe ser al menos 1.';
+    if(!(a > 0)) return 'El multiplicador a debe ser mayor que 0.';
+    if(!(c > 0)) return 'El incremento c debe ser mayor que 0.';
+    if(!(seed > 0 && seed < m)) return 'La semilla debe ser mayor que 0 y menor que m.';
+    if(!(n > 0)) return 'La cantidad n debe ser mayor que 0.';
     return null;
   }
 
@@ -89,7 +116,7 @@
 
   generateBtn.addEventListener('click', ()=>{
     clearMessage();
-    const m = mInput.value.trim();
+    const m = (mSelect ? mSelect.value : '16').toString().trim();
     const a = aInput.value.trim();
     const c = cInput.value.trim();
     const seed = seedInput.value.trim();
@@ -116,7 +143,8 @@
   });
 
   resetBtn.addEventListener('click', ()=>{
-    mInput.value = '16'; aInput.value = '5'; cInput.value = '3'; seedInput.value = '7'; nInput.value = '20';
+    if(mSelect) { mSelect.value = ''; mInfo.textContent = `g = ${Math.log2(parseInt(mSelect.value,10))}`; }
+    aInput.value = ''; cInput.value = ''; seedInput.value = ''; nInput.value = '';
     tableBody.innerHTML = '';
     chart.data.datasets[0].data = [];
     chart.update();
@@ -125,7 +153,30 @@
     if(exportBtn) exportBtn.disabled = true;
   });
 
-  [mInput,aInput,cInput,seedInput,nInput].forEach(inp=>{
+  if(nInput && mSelect){
+    nInput.addEventListener('input', ()=>{
+      const nv = parseInt(nInput.value,10);
+      if(!isNaN(nv) && nv > 0){
+        const target = nextPow2(nv);
+        // find smallest option >= target
+        const opts = Array.from(mSelect.options).map(o=>parseInt(o.value,10)).sort((a,b)=>a-b);
+        const pick = opts.find(v=>v >= target) || opts[opts.length-1];
+        mSelect.value = String(pick);
+        mInfo.textContent = `g = ${Math.log2(parseInt(mSelect.value,10))}`;
+      } else {
+        mInfo.textContent = '';
+      }
+    });
+  }
+
+  if(mSelect){
+    mSelect.addEventListener('change', ()=>{
+      mInfo.textContent = `g = ${Math.log2(parseInt(mSelect.value,10))}`;
+    });
+  }
+
+  [mSelect,aInput,cInput,seedInput,nInput].forEach(inp=>{
+    if(!inp) return;
     inp.addEventListener('keydown',(e)=>{ if(e.key === 'Enter'){ generateBtn.click(); } });
   });
 
